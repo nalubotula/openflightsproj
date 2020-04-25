@@ -1,0 +1,3 @@
+containers:
+- name: airlines-app
+  image: openflights.azurecr.io/airlines-app:v1
