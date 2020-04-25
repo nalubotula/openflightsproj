@@ -1,3 +1,37 @@
-containers:
-- name: airlines-app
-  image: openflights.azurecr.io/airlines-app:v1
+apiVersion: v1
+kind: Service
+metadata:
+  name: airlines-app
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: airlines-app
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: airlines-front
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: airlines-front
+    spec:
+      containers:
+      - name: airlines-app
+        image: openflights.azurecr.io/airlines-app:v1
+        ports:
+        - containerPort: 8443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: airlines-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: airlines-front
